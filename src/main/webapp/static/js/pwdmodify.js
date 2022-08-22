@@ -16,8 +16,8 @@ $(function () {
     oldpassword.on("blur", function () {
         $.ajax({
             type: "GET",
-            url: path + "/jsp/user.do",
-            data: {method: "pwdmodify", oldpassword: oldpassword.val()},
+            url: path + "/login/checkpwd",
+            data: {oldpassword: oldpassword.val()},
             dataType: "json",
             success: function (data) {
                 if (data.result == "true") {//旧密码正确
@@ -29,8 +29,7 @@ $(function () {
                 } else if (data.result == "error") {//旧密码输入为空
                     validateTip(oldpassword.next(), {"color": "red"}, imgNo + " 请输入旧密码", false);
                 }
-            },
-            error: function (data) {
+            }, error: function (data) {
                 //请求出错
                 validateTip(oldpassword.next(), {"color": "red"}, imgNo + " 请求错误", false);
             }

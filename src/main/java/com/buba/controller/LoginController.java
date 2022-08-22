@@ -1,5 +1,6 @@
 package com.buba.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.buba.pojo.User;
 import com.buba.service.LoginService;
 import com.buba.service.impl.LoginServiceImpl;
@@ -7,8 +8,12 @@ import com.buba.tool.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 包含登录、注销、修改密码
@@ -48,5 +53,50 @@ public class LoginController {
         }
 
         return view;
+    }
+
+    /**
+     * 注销
+     * @param session
+     * @return
+     */
+    @RequestMapping("/logout")
+    public String logOut(HttpSession session) {
+        session.removeAttribute(Constants.USER_SESSION);
+        return "../login";
+    }
+
+    /**
+     * 验证旧密码
+     * @param session
+     * @param pwd
+     * @return
+     */
+    @RequestMapping("/checkpwd")
+    @ResponseBody
+    public String checkOldPassword(HttpSession session, @RequestParam("oldpassword") String pwd){
+        String result = "";
+        if (pwd == null || pwd.isEmpty()){
+            // 旧密码为空
+            result = "error";
+        } else {
+            User user = (User) session.getAttribute(Constants.USER_SESSION);
+            if (user == null) {
+                // session过期
+                result = "sessionerror";
+            } else {
+                if (user.getUserPassword().equals(pwd)){
+                    // 旧密码正确
+                    result = "true";
+                } else {
+                    // 旧密码错误
+                    result = "false";
+                }
+            }
+        }
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("result", result);
+
+        return JSON.toJSONString(resultMap);
     }
 }
