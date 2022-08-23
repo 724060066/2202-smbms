@@ -17,4 +17,15 @@ public interface LoginDao {
      * @return
      */
     User login(Connection connection, String userCode, String userPassword) throws Exception;
+
+    /**
+     * 修改密码
+     * @param connection
+     * @param id
+     * @param pwd
+     * @return
+     * @throws Exception
+     */
+    int updatePassword(Connection connection, String id, String pwd) throws Exception;
+
 }

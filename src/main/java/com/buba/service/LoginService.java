@@ -14,4 +14,12 @@ public interface LoginService {
      * @return
      */
     User login(String userCode, String userPassword);
+
+    /**
+     * 修改密码
+     * @param id
+     * @param pwd
+     * @return true:修改成功；false：修改失败
+     */
+    boolean updatePassword(String id, String pwd);
 }

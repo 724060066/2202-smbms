@@ -52,4 +52,29 @@ public class LoginDaoImpl implements LoginDao {
         }
         return user;
     }
+
+    /**
+     * 修改密码
+     * @param connection
+     * @param id
+     * @param pwd
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int updatePassword(Connection connection, String id, String pwd) throws Exception {
+        PreparedStatement pstm = null;
+        int num = 0;
+        if(connection != null){
+            StringBuffer sql = new StringBuffer();
+            sql.append("update smbms_user set userPassword = ? where id = ?");
+
+            Object[] params = {pwd, id};
+            System.out.println("sql ----> " + sql.toString());
+            num = BaseDao.execute(connection, pstm, sql.toString(), params);
+            // 释放资源
+            BaseDao.closeResource(null, pstm, null);
+        }
+        return num;
+    }
 }

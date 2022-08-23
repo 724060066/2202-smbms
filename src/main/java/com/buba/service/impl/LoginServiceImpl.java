@@ -24,7 +24,6 @@ public class LoginServiceImpl implements LoginService {
      */
     @Override
     public User login(String userCode, String userPassword) {
-        // TODO Auto-generated method stub
         Connection connection = null;
         User user = null;
         try {
@@ -39,5 +38,35 @@ public class LoginServiceImpl implements LoginService {
             BaseDao.closeResource(connection, null, null);
         }
         return user;
+    }
+
+    /**
+     * 修改密码
+     * @param id
+     * @param pwd
+     * @return true:修改成功；false：修改失败
+     */
+    @Override
+    public boolean updatePassword(String id, String pwd) {
+        Connection connection = null;
+        int num = 0;
+        boolean flag = false;
+        try {
+            LoginDao loginDao = new LoginDaoImpl();
+            // 取得数据库链接
+            connection = BaseDao.getConnection();
+            num = loginDao.updatePassword(connection, id, pwd);
+
+            if (num > 0){
+                // 修改成功
+                flag = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            // 关闭数据库链接
+            BaseDao.closeResource(connection, null, null);
+        }
+        return flag;
     }
 }

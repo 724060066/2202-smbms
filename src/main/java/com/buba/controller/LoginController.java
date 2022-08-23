@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -94,9 +96,37 @@ public class LoginController {
                 }
             }
         }
+
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put("result", result);
 
         return JSON.toJSONString(resultMap);
+    }
+
+    /**
+     * 修改密码
+     * @param model
+     * @param session
+     * @param pwd
+     * @return
+     */
+    @RequestMapping("/updatePassword")
+    public String updatePassword(Model model, HttpSession session, @RequestParam("newpassword") String pwd) {
+        User user = (User) session.getAttribute(Constants.USER_SESSION);
+        String id = user.getId().toString();
+
+        LoginService loginService = new LoginServiceImpl();
+        // 修改密码   true:修改成功；false：修改失败
+        boolean flag = loginService.updatePassword(id, pwd);
+        if (flag) {
+            // 修改成功
+            session.removeAttribute(Constants.USER_SESSION);
+            model.addAttribute("error", "密码修改成功，请重新登录");
+            return "../login";
+        } else {
+            // 修改失败
+            model.addAttribute("message", "密码修改失败");
+            return "pwdmodify";
+        }
     }
 }
