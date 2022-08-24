@@ -2,12 +2,12 @@ package com.buba.service.impl;
 
 import com.buba.dao.BaseDao;
 import com.buba.dao.BillDao;
-import com.buba.dao.LoginDao;
+import com.buba.dao.ProviderDao;
 import com.buba.dao.impl.BillDaoImpl;
-import com.buba.dao.impl.LoginDaoImpl;
+import com.buba.dao.impl.ProviderDaoImpl;
 import com.buba.pojo.Bill;
-import com.buba.pojo.User;
-import com.buba.service.BillService;
+import com.buba.pojo.Provider;
+import com.buba.service.ProviderService;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -17,30 +17,29 @@ import java.util.List;
  * @author chenrui
  * @version 1.0
  * @description: TODO
- * @date 2022/8/23 15:12
+ * @date 2022/8/24 08:33
  */
-public class BillServiceImpl implements BillService {
+public class ProviderServiceImpl implements ProviderService {
 
     /**
-     * 查询订单列表
+     * 查询供应商信息
      * @return
      */
     @Override
-    public List<Bill> listBill(String proName,
-                               String proId, String isPayment) {
+    public List<Provider> listProvider() {
         Connection connection = null;
-        List<Bill> billList = new ArrayList<>();
+        List<Provider> providerList = new ArrayList<>();
         try {
-            BillDao billDao = new BillDaoImpl();
+            ProviderDao providerDao = new ProviderDaoImpl();
             // 取得数据库链接
             connection = BaseDao.getConnection();
-            billList = billDao.listBill(connection, proName, proId, isPayment);
+            providerList = providerDao.listProvider(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }finally{
             // 关闭数据库链接
             BaseDao.closeResource(connection, null, null);
         }
-        return billList;
+        return providerList;
     }
 }

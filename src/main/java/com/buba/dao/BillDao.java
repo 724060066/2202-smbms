@@ -16,8 +16,12 @@ public interface BillDao {
     /**
      * 查询订单列表
      * @param connection
+     * @param proName
+     * @param proId
+     * @param isPayment
      * @return
      * @throws Exception
      */
-    List<Bill> listBill(Connection connection) throws Exception;
+    List<Bill> listBill(Connection connection, String proName,
+                        String proId, String isPayment) throws Exception;
 }

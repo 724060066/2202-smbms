@@ -14,5 +14,6 @@ public interface BillService {
      * 查询订单列表
      * @return
      */
-    List<Bill> listBill();
+    List<Bill> listBill(String proName,
+                        String proId, String isPayment);
 }

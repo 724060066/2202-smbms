@@ -22,23 +22,39 @@ public class BillDaoImpl implements BillDao {
     /**
      * 查询订单列表
      * @param connection
+     * @param proName
+     * @param proId
+     * @param isPayment
      * @return
      * @throws Exception
      */
     @Override
-    public List<Bill> listBill(Connection connection) throws Exception {
+    public List<Bill> listBill(Connection connection, String proName,
+                               String proId, String isPayment) throws Exception {
         PreparedStatement pstm = null;
         ResultSet rs = null;
         List<Bill> billList = new ArrayList<>();
         if(connection != null){
+            List<Object> params = new ArrayList<>();
             StringBuffer sql = new StringBuffer();
             sql.append("select sb.*,sp.proName from ");
             sql.append("smbms_bill sb,smbms_provider sp ");
-            sql.append("where sb.providerId = sp.id");
+            sql.append("where sb.providerId = sp.id ");
+            if (proName != null && !proName.isEmpty()){
+                sql.append("and productName like ? ");
+                params.add("%" + proName + "%");
+            }
+            if (proId != null && !"0".equals(proId)) {
+                sql.append("and providerId = ? ");
+                params.add(proId);
+            }
+            if (isPayment != null && !"0".equals(isPayment)) {
+                sql.append("and isPayment = ? ");
+                params.add(isPayment);
+            }
 
-            Object[] params = {};
             System.out.println("sql ----> " + sql.toString());
-            rs = BaseDao.execute(connection, pstm, rs, sql.toString(), params);
+            rs = BaseDao.execute(connection, pstm, rs, sql.toString(), params.toArray());
             while(rs.next()){
                 Bill bill = new Bill();
                 bill.setId(rs.getInt("id"));
