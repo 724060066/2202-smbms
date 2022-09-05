@@ -1,5 +1,6 @@
 package com.buba.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.buba.pojo.Bill;
 import com.buba.pojo.Provider;
 import com.buba.service.BillService;
@@ -9,7 +10,7 @@ import com.buba.service.impl.ProviderServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -29,9 +30,11 @@ public class BillController {
                            String queryProviderId, String queryIsPayment) {
 
         BillService billService = new BillServiceImpl();
+        // 查询订单列表
         List<Bill> billList = billService.listBill(queryProductName, queryProviderId, queryIsPayment);
 
         ProviderService providerService = new ProviderServiceImpl();
+        // 查询供应商下拉列表
         List<Provider> providerList = providerService.listProvider();
 
         model.addAttribute("billList", billList);
@@ -41,5 +44,19 @@ public class BillController {
         model.addAttribute("queryIsPayment", queryIsPayment);
 
         return "billlist";
+    }
+
+    /**
+     * 添加页面ajax查询供应商下拉列表
+     * @return
+     */
+    @RequestMapping(value = "/listProviderForSelect", produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String listProviderForSelect() {
+        ProviderService providerService = new ProviderServiceImpl();
+        // 查询供应商下拉列表
+        List<Provider> providerList = providerService.listProvider();
+
+        return JSON.toJSONString(providerList);
     }
 }

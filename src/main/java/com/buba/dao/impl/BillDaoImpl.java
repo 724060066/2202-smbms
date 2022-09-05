@@ -41,15 +41,15 @@ public class BillDaoImpl implements BillDao {
             sql.append("smbms_bill sb,smbms_provider sp ");
             sql.append("where sb.providerId = sp.id ");
             if (proName != null && !proName.isEmpty()){
-                sql.append("and productName like ? ");
+                sql.append("and sb.productName like ? ");
                 params.add("%" + proName + "%");
             }
             if (proId != null && !"0".equals(proId)) {
-                sql.append("and providerId = ? ");
+                sql.append("and sb.providerId = ? ");
                 params.add(proId);
             }
             if (isPayment != null && !"0".equals(isPayment)) {
-                sql.append("and isPayment = ? ");
+                sql.append("and sb.isPayment = ? ");
                 params.add(isPayment);
             }
 
