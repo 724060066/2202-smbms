@@ -43,4 +43,26 @@ public class BillServiceImpl implements BillService {
         }
         return billList;
     }
+
+    /**
+     * 添加订单信息
+     * @param bill
+     */
+    @Override
+    public void insertBill(Bill bill) {
+        Connection connection = null;
+        try {
+            BillDao billDao = new BillDaoImpl();
+            // 取得数据库链接
+            connection = BaseDao.getConnection();
+            billDao.insertBill(connection, bill);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            // 关闭数据库链接
+            BaseDao.closeResource(connection, null, null);
+        }
+    }
+
+
 }

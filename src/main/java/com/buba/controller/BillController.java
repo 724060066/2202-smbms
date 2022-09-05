@@ -3,15 +3,18 @@ package com.buba.controller;
 import com.alibaba.fastjson.JSON;
 import com.buba.pojo.Bill;
 import com.buba.pojo.Provider;
+import com.buba.pojo.User;
 import com.buba.service.BillService;
 import com.buba.service.ProviderService;
 import com.buba.service.impl.BillServiceImpl;
 import com.buba.service.impl.ProviderServiceImpl;
+import com.buba.tool.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -58,5 +61,24 @@ public class BillController {
         List<Provider> providerList = providerService.listProvider();
 
         return JSON.toJSONString(providerList);
+    }
+
+    /**
+     * 添加订单信息
+     * @param bill
+     * @param session
+     * @return
+     */
+    @RequestMapping("/insertBill")
+    public String insertBill(Bill bill, HttpSession session) {
+        // 取得session中的用户信息
+        User user = (User) session.getAttribute(Constants.USER_SESSION);
+        bill.setCreatedBy(user.getId());
+
+        BillService billService = new BillServiceImpl();
+        // 添加订单信息
+        billService.insertBill(bill);
+
+        return "redirect:/bill/listBill";
     }
 }

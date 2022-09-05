@@ -76,4 +76,48 @@ public class BillDaoImpl implements BillDao {
         }
         return billList;
     }
+
+    /**
+     * 添加订单信息
+     * @param connection
+     * @param bill
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int insertBill(Connection connection, Bill bill) throws Exception {
+        PreparedStatement pstm = null;
+        int num = 0;
+        if(connection != null){
+            List<Object> params = new ArrayList<>();
+            StringBuffer sql = new StringBuffer();
+            sql.append("insert into smbms_bill( ");
+            sql.append("billCode, ");
+            sql.append("productName, ");
+            sql.append("productUnit, ");
+            sql.append("productCount, ");
+            sql.append("totalPrice, ");
+            sql.append("providerId, ");
+            sql.append("isPayment, ");
+            sql.append("createdBy, ");
+            sql.append("creationDate) ");
+            sql.append("values(?,?,?,?,?,?,?,?,now()) ");
+
+            params.add(bill.getBillCode());
+            params.add(bill.getProductName());
+            params.add(bill.getProductUnit());
+            params.add(bill.getProductCount());
+            params.add(bill.getTotalPrice());
+            params.add(bill.getProviderId());
+            params.add(bill.getIsPayment());
+            params.add(bill.getCreatedBy());
+
+            System.out.println("sql ----> " + sql.toString());
+            num = BaseDao.execute(connection, pstm, sql.toString(), params.toArray());
+
+            // 释放资源
+            BaseDao.closeResource(null, pstm, null);
+        }
+        return num;
+    }
 }
