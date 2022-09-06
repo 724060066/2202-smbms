@@ -120,4 +120,30 @@ public class BillDaoImpl implements BillDao {
         }
         return num;
     }
+
+    /**
+     * 根据id删除订单信息
+     * @param connection
+     * @param billId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int deleteBillById(Connection connection, String billId) throws Exception {
+        PreparedStatement pstm = null;
+        int num = 0;
+        if(connection != null){
+            List<Object> params = new ArrayList<>();
+            StringBuffer sql = new StringBuffer();
+            sql.append("delete1 from smbms_bill where id = ? ");
+            params.add(billId);
+
+            System.out.println("sql ----> " + sql.toString());
+            num = BaseDao.execute(connection, pstm, sql.toString(), params.toArray());
+
+            // 释放资源
+            BaseDao.closeResource(null, pstm, null);
+        }
+        return num;
+    }
 }

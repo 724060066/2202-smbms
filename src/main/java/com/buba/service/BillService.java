@@ -22,4 +22,11 @@ public interface BillService {
      * @param bill
      */
     void insertBill(Bill bill);
+
+    /**
+     * 根据id删除订单信息
+     * @param billId
+     * @return
+     */
+    String deleteBillById(String billId);
 }

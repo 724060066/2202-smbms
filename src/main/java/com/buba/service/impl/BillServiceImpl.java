@@ -64,5 +64,35 @@ public class BillServiceImpl implements BillService {
         }
     }
 
+    /**
+     * 根据id删除订单信息
+     * @param billId
+     * @return
+     */
+    @Override
+    public String deleteBillById(String billId) {
+        Connection connection = null;
+        String result = "";
+        int num = 0;
+        try {
+            BillDao billDao = new BillDaoImpl();
+            // 取得数据库链接
+            connection = BaseDao.getConnection();
+            num = billDao.deleteBillById(connection, billId);
+            if (num > 0){
+                result = "true";
+            } else {
+                result = "notexist";
+            }
+        } catch (Exception e) {
+            result = "false";
+            e.printStackTrace();
+        }finally{
+            // 关闭数据库链接
+            BaseDao.closeResource(connection, null, null);
+        }
+        return result;
+    }
+
 
 }

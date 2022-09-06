@@ -4,10 +4,11 @@ var billObj;
 function deleteBill(obj) {
     $.ajax({
         type: "GET",
-        url: path + "/jsp/bill.do",
-        data: {method: "delbill", billid: obj.attr("billid")},
+        url: path + "/bill/deleteBill",
+        data: {billId: obj.attr("billid")},
         dataType: "json",
         success: function (data) {
+            // {"delResult":"notexist"}
             if (data.delResult == "true") {//删除成功：移除删除行
                 cancleBtn();
                 obj.parents("tr").remove();

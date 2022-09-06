@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单管理controller
@@ -80,5 +82,21 @@ public class BillController {
         billService.insertBill(bill);
 
         return "redirect:/bill/listBill";
+    }
+
+    /**
+     * 根据id删除订单信息
+     * @param billId
+     * @return
+     */
+    @RequestMapping("/deleteBill")
+    @ResponseBody
+    public String deleteBillById(String billId) {
+        BillService billService = new BillServiceImpl();
+        String result = billService.deleteBillById(billId);
+
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("delResult", result);
+        return JSON.toJSONString(resultMap);
     }
 }

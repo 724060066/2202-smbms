@@ -33,4 +33,13 @@ public interface BillDao {
      * @throws Exception
      */
     int insertBill(Connection connection, Bill bill) throws Exception;
+
+    /**
+     * 根据id删除订单信息
+     * @param connection
+     * @param billId
+     * @return
+     * @throws Exception
+     */
+    int deleteBillById(Connection connection, String billId) throws Exception;
 }
