@@ -3,7 +3,6 @@ package com.buba.dao.impl;
 import com.buba.dao.BaseDao;
 import com.buba.dao.BillDao;
 import com.buba.pojo.Bill;
-import com.buba.pojo.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -137,6 +136,86 @@ public class BillDaoImpl implements BillDao {
             StringBuffer sql = new StringBuffer();
             sql.append("delete1 from smbms_bill where id = ? ");
             params.add(billId);
+
+            System.out.println("sql ----> " + sql.toString());
+            num = BaseDao.execute(connection, pstm, sql.toString(), params.toArray());
+
+            // 释放资源
+            BaseDao.closeResource(null, pstm, null);
+        }
+        return num;
+    }
+
+    /**
+     * 根据id查询订单信息
+     * @param connection
+     * @param billId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Bill getBillById(Connection connection, String billId) throws Exception {
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        Bill bill = new Bill();
+        if(connection != null){
+            List<Object> params = new ArrayList<>();
+            StringBuffer sql = new StringBuffer();
+            sql.append("select sb.*,sp.proName from ");
+            sql.append("smbms_bill sb,smbms_provider sp ");
+            sql.append("where sb.providerId = sp.id ");
+            sql.append("and sb.id = ? ");
+            params.add(billId);
+
+            System.out.println("sql ----> " + sql.toString());
+            rs = BaseDao.execute(connection, pstm, rs, sql.toString(), params.toArray());
+            while(rs.next()){
+                bill.setId(rs.getInt("id"));
+                bill.setBillCode(rs.getString("billCode"));
+                bill.setProductName(rs.getString("productName"));
+                bill.setProductDesc(rs.getString("productDesc"));
+                bill.setProductUnit(rs.getString("productUnit"));
+                bill.setProductCount(rs.getBigDecimal("productCount"));
+                bill.setTotalPrice(rs.getBigDecimal("totalPrice"));
+                bill.setIsPayment(rs.getInt("isPayment"));
+                bill.setProviderId(rs.getInt("providerId"));
+                bill.setCreationDate(rs.getDate("creationDate"));
+                bill.setProviderName(rs.getString("proName"));
+            }
+            // 释放资源
+            BaseDao.closeResource(null, pstm, rs);
+        }
+        return bill;
+    }
+
+    @Override
+    public int updateBillById(Connection connection, Bill bill) throws Exception {
+        PreparedStatement pstm = null;
+        int num = 0;
+        if(connection != null){
+            List<Object> params = new ArrayList<>();
+            StringBuffer sql = new StringBuffer();
+            sql.append("update smbms_bill set ");
+            sql.append("billCode = ?, ");
+            sql.append("productName = ?, ");
+            sql.append("productUnit = ?, ");
+            sql.append("productCount = ?, ");
+            sql.append("totalPrice = ?, ");
+            sql.append("providerId = ?, ");
+            sql.append("isPayment = ?, ");
+            sql.append("modifyBy = ?, ");
+            sql.append("modifyDate = now() ");
+            sql.append("where id = ? ");
+
+            params.add(bill.getBillCode());
+            params.add(bill.getProductName());
+            params.add(bill.getProductUnit());
+            params.add(bill.getProductCount());
+            params.add(bill.getTotalPrice());
+            params.add(bill.getProviderId());
+            params.add(bill.getIsPayment());
+            params.add(bill.getModifyBy());
+            params.add(bill.getId());
 
             System.out.println("sql ----> " + sql.toString());
             num = BaseDao.execute(connection, pstm, sql.toString(), params.toArray());

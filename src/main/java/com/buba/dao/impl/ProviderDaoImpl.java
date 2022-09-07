@@ -2,7 +2,6 @@ package com.buba.dao.impl;
 
 import com.buba.dao.BaseDao;
 import com.buba.dao.ProviderDao;
-import com.buba.pojo.Bill;
 import com.buba.pojo.Provider;
 
 import java.sql.Connection;

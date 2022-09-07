@@ -1,11 +1,8 @@
 package com.buba.service.impl;
 
 import com.buba.dao.BaseDao;
-import com.buba.dao.BillDao;
 import com.buba.dao.ProviderDao;
-import com.buba.dao.impl.BillDaoImpl;
 import com.buba.dao.impl.ProviderDaoImpl;
-import com.buba.pojo.Bill;
 import com.buba.pojo.Provider;
 import com.buba.service.ProviderService;
 

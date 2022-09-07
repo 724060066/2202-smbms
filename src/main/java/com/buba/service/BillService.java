@@ -2,7 +2,6 @@ package com.buba.service;
 
 import com.buba.pojo.Bill;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -29,4 +28,17 @@ public interface BillService {
      * @return
      */
     String deleteBillById(String billId);
+
+    /**
+     * 根据id查询订单信息
+     * @param billId
+     * @return
+     */
+    Bill getBillById(String billId);
+
+    /**
+     * 根据id修改订单信息
+     * @param bill
+     */
+    void updateBillById(Bill bill);
 }

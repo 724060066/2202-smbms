@@ -2,11 +2,8 @@ package com.buba.service.impl;
 
 import com.buba.dao.BaseDao;
 import com.buba.dao.BillDao;
-import com.buba.dao.LoginDao;
 import com.buba.dao.impl.BillDaoImpl;
-import com.buba.dao.impl.LoginDaoImpl;
 import com.buba.pojo.Bill;
-import com.buba.pojo.User;
 import com.buba.service.BillService;
 
 import java.sql.Connection;
@@ -92,6 +89,49 @@ public class BillServiceImpl implements BillService {
             BaseDao.closeResource(connection, null, null);
         }
         return result;
+    }
+
+    /**
+     * 根据id查询订单信息
+     * @param billId
+     * @return
+     */
+    @Override
+    public Bill getBillById(String billId) {
+        Connection connection = null;
+        Bill bill = new Bill();
+        try {
+            BillDao billDao = new BillDaoImpl();
+            // 取得数据库链接
+            connection = BaseDao.getConnection();
+            bill = billDao.getBillById(connection, billId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            // 关闭数据库链接
+            BaseDao.closeResource(connection, null, null);
+        }
+        return bill;
+    }
+
+    /**
+     * 根据id修改订单信息
+     * @param bill
+     */
+    @Override
+    public void updateBillById(Bill bill) {
+        Connection connection = null;
+        try {
+            BillDao billDao = new BillDaoImpl();
+            // 取得数据库链接
+            connection = BaseDao.getConnection();
+            billDao.updateBillById(connection, bill);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            // 关闭数据库链接
+            BaseDao.closeResource(connection, null, null);
+        }
     }
 
 

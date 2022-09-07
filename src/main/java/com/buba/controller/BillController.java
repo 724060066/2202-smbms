@@ -52,7 +52,7 @@ public class BillController {
     }
 
     /**
-     * 添加页面ajax查询供应商下拉列表
+     * 页面ajax查询供应商下拉列表
      * @return
      */
     @RequestMapping(value = "/listProviderForSelect", produces = "text/html;charset=UTF-8")
@@ -98,5 +98,49 @@ public class BillController {
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put("delResult", result);
         return JSON.toJSONString(resultMap);
+    }
+
+    /**
+     *
+     * @param model
+     * @param billId
+     * @return
+     */
+    @RequestMapping("/getBillById")
+    public String getBillById(Model model, String billId){
+        BillService billService = new BillServiceImpl();
+        Bill bill = billService.getBillById(billId);
+
+        model.addAttribute("bill", bill);
+
+        return "billview";
+    }
+
+    /**
+     * 修改页面初始化
+     * @param model
+     * @param billId
+     * @return
+     */
+    @RequestMapping("/getBillForUpdate")
+    public String getBillForUpdate(Model model, String billId) {
+        BillService billService = new BillServiceImpl();
+        Bill bill = billService.getBillById(billId);
+
+        model.addAttribute("bill", bill);
+
+        return "billmodify";
+    }
+
+    @RequestMapping("/updateBillById")
+    public String updateBillById(Bill bill, HttpSession session) {
+        // 取得session中的用户信息
+        User user = (User) session.getAttribute(Constants.USER_SESSION);
+        bill.setModifyBy(user.getId());
+
+        BillService billService = new BillServiceImpl();
+        billService.updateBillById(bill);
+
+        return "redirect:/bill/listBill";
     }
 }
